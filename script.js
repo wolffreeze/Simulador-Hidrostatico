@@ -135,6 +135,7 @@
     
     // Ajusta wallX para que comience después de la visualización completa de la presión
     const wallX = fluidLeft + fluidWidth + requiredMargin; // <-- NUEVO CÁLCULO
+    const wallW = Math.round(W * 0.12)
     ctx.fillStyle = '#eee';
     ctx.fillRect(wallX, fluidTop, wallW, fluidHeight);
     ctx.strokeStyle = '#cfcfcf';
@@ -204,4 +205,5 @@
   // initial draw
   draw();
 })();
+
 
