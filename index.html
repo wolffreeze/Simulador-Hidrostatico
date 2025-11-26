@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Simulador Hidrostático · Pro</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <h2>Simulador Hidrostático</h2>
+      <p class="muted">Ajusta parámetros y observa la distribución de presión y la fuerza resultante.</p>
+
+      <div class="control">
+        <label for="rho">Densidad ρ (kg/m³)</label>
+        <input id="rho" type="number" step="any" value="1000" min="0" title="Masa por unidad de volumen (kg/m³)">
+      </div>
+
+      <div class="control">
+        <label for="g">Gravedad g (m/s²)</label>
+        <input id="g" type="number" step="any" value="9.81" min="0" title="Aceleración por gravedad">
+      </div>
+
+      <div class="control">
+        <label for="h">Profundidad h (m)</label>
+        <input id="h" type="number" step="any" value="2" min="0" title="Altura de la columna de fluido">
+      </div>
+
+      <div class="control">
+        <label for="area">Área A (m²)</label>
+        <input id="area" type="number" step="any" value="1" min="0" title="Área de la superficie sumergida">
+      </div>
+
+      <div class="control">
+        <label for="steps">Resolución visual</label>
+        <input id="steps" type="range" min="8" max="120" value="40">
+        <div class="small muted">Mayor resolución = más líneas de presión</div>
+      </div>
+
+      <div class="buttons">
+        <button id="btnUpdate" class="btn primary">Actualizar</button>
+        <button id="btnDownload" class="btn">Descargar imagen</button>
+        <button id="btnCopy" class="btn ghost">Copiar parámetros</button>
+      </div>
+
+      <div class="info">
+        <h3>Notas</h3>
+        <ul>
+          <li>Presión: <code>P = P<sub>0</sub> + ρ g h</code></li>
+          <li>Fuerza: <code>F = ρ g h<sub>c</sub> A</code> (h<sub>c</sub> = h/2 para pared rectangular)</li>
+        </ul>
+      </div>
+
+      <footer class="sidebar-footer">
+        <small>Hecho para entrega · LRPD · 2025</small>
+      </footer>
+    </aside>
+
+    <main class="main">
+      <section class="canvas-wrap">
+        <canvas id="simCanvas" class="sim-canvas" aria-label="Visualización de la simulación"></canvas>
+      </section>
+
+      <section class="results-card">
+        <h3>Resultados</h3>
+        <div id="results">
+          <div class="row"><span>Presión en la base (h):</span><strong id="resP">—</strong></div>
+          <div class="row"><span>Fuerza total (F):</span><strong id="resF">—</strong></div>
+          <div class="row"><span>Centroide (h<sub>c</sub>):</span><strong id="resHc">—</strong></div>
+          <div class="row"><span>Parámetros:</span><small id="resParams" class="muted">—</small></div>
+        </div>
+
+        <div class="explain">
+          <h4>Interpretación rápida</h4>
+          <p id="interpretation" class="muted">Ajusta los parámetros y pulsa <strong>Actualizar</strong> para ver resultados en el gráfico.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
