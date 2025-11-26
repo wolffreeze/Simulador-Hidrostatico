@@ -129,8 +129,12 @@
     }
 
     // wall
-    const wallX = fluidLeft + fluidWidth + Math.round(W * 0.22);
-    const wallW = Math.round(W * 0.12);
+    // Define un desplazamiento seguro que incluye el ancho de la barra (maxBarWidth) 
+    // y el espacio ocupado por el texto de la presión (80 * DPR), más un margen (ej: 20 * DPR)
+    const requiredMargin = maxBarWidth + 80 * DPR + 20 * DPR;
+    
+    // Ajusta wallX para que comience después de la visualización completa de la presión
+    const wallX = fluidLeft + fluidWidth + requiredMargin; // <-- NUEVO CÁLCULO
     ctx.fillStyle = '#eee';
     ctx.fillRect(wallX, fluidTop, wallW, fluidHeight);
     ctx.strokeStyle = '#cfcfcf';
@@ -200,3 +204,4 @@
   // initial draw
   draw();
 })();
+
