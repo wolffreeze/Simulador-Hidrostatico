@@ -1,4 +1,3 @@
-// script.js — Simulador Hidrostático Pro (vanilla JS)
 (function(){
   // DOM
   const canvas = document.getElementById('simCanvas');
@@ -56,13 +55,27 @@
     const F = rho * g * hc * A;
     const Pbase = pressureAt(h);
 
+    // ----------------------------------------------------
+    // *** CÁLCULO DEL CENTRO DE PRESIÓN (yp) ***
+    let yp = hc; // Valor por defecto: el centroide
+    
+    // Solo se calcula si la placa tiene dimensiones
+    if (h > 0 && A > 0) {
+        // Ixx,c para un rectángulo de altura h y área A: Ixx,c = (A * h^2) / 12
+        const I_xx_c = (A * Math.pow(h, 2)) / 12;
+        
+        // yp = hc + Ixx,c / (hc * A)
+        yp = hc + I_xx_c / (hc * A);
+    }
+
     // results UI
     resP.textContent = formatNumber(Math.round(Pbase), 'Pa');
     resF.textContent = formatNumber(Math.round(F), 'N');
-    resHc.textContent = formatNumber(hc, 'm');
+    // Usamos yp para la visualización del punto de aplicación de la fuerza
+    resHc.textContent = formatNumber(yp, 'm'); 
     resParams.textContent = `ρ=${rho} kg/m³ · g=${g} m/s² · h=${h} m · A=${A} m²`;
 
-    interpretation.textContent = `La presión en la base es ${Math.round(Pbase)} Pa. La fuerza total resultante sobre la superficie es ${Math.round(F)} N.`;
+    interpretation.textContent = `La presión en la base es ${Math.round(Pbase)} Pa. La fuerza total resultante sobre la superficie es ${Math.round(F)} N, aplicada en el Centro de Presión (y_p) a ${formatNumber(yp)} m.`;
 
     // drawing area
     const W = canvas.width;
@@ -123,8 +136,8 @@
     ctx.strokeStyle = '#cfcfcf';
     ctx.strokeRect(wallX, fluidTop, wallW, fluidHeight);
 
-    // center of pressure (approx hc)
-    const yHp = fluidTop + (hc / (h || 1)) * fluidHeight;
+    // center of pressure (USAMOS yp EN LUGAR DE hc)
+    const yHp = fluidTop + (yp / (h || 1)) * fluidHeight; 
     // vector of force
     const maxVis = 220 * DPR;
     const forceScale = Math.min(maxVis, (F / (Math.max(1, rho * g * h * A))) * maxVis);
